@@ -1,0 +1,21 @@
+Qué archivos se crean exactamente en el ZIP
+
+.gitignore
+pubspec.yaml
+README.md
+.github/workflows/flutter-ci.yml
+lib/main.dart
+lib/screens/home_screen.dart
+lib/screens/ejercicio1_screen.dart
+lib/widgets/figura_widget.dart
+lib/services/audio_service.dart
+lib/services/utils.dart
+assets/images/ (vacío; copia aquí las imágenes)
+assets/audio/ (vacío; copia aquí el audio si lo tienes)
+Notas finales y recomendaciones
+
+Después de ejecutar el script, copia los assets desde el repo original:
+Clona el repo original y copia image/* → simulador/assets/images/
+Copia el audio (si existe) a simulador/assets/audio/disparo.mp3
+El POC maneja la ausencia del archivo de audio de forma segura (no fallará), pero para oír el sonido debes añadir el mp3.
+Si quieres que prepare los archivos completos como un ZIP y lo suba a un repo mío o a un Gist, necesitaría que me autorices a crear y escribir ese repo/archivo en tu cuenta (o me facilites un destino), porque desde aquí no puedo cargar archivos en tu máquina. Puedo, sin embargo, si lo deseas, ejecutar llamadas para crear un repo y push si me autorizas y el repo ya existe — actualmente no puedo crear repositorios en tu cuenta por ti con las herramientas disponibles.
