@@ -9,6 +9,11 @@ def main():
     root.title("Simulador")
     root.state("zoomed")
 
+    #####################
+    # Cerrar con Escape #
+    root.bind("<Escape>", lambda e: root.destroy())
+    #####################
+
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
