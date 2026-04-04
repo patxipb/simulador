@@ -20,43 +20,47 @@ class ConfigScreen(ttk.Frame):
         self._build()
 
     def _build(self):
-        ttk.Label(self, text="Configuración").grid(row=0, column=0, columnspan=2, pady=20)
+
+        tk.Label(self, text="Configuración", font=("TkDefaultFont", 32)).grid(row=0, column=0, columnspan=2, pady=20)
+
 
         # Forma
-        ttk.Label(self, text="Figura").grid(row=1, column=0)
-        ttk.Combobox(self, textvariable=self.shape, values=list(SHAPES.values())).grid(row=1, column=1)
+        tk.Label(self, text="Figura", font=("TkDefaultFont", 20)).grid(row=1, column=0)
+
+        om_shape = tk.OptionMenu(self, self.shape, *SHAPES.values())
+        om_shape.config(font=("TkDefaultFont", 20))
+        om_shape['menu'].config(font=("TkDefaultFont", 20))
+        om_shape.grid(row=1, column=1, sticky="ew")
 
         # Color
-        ttk.Label(self, text="Color").grid(row=2, column=0)
-        ttk.Combobox(self, textvariable=self.color, values=list(COLORS.values())).grid(row=2, column=1)
+        tk.Label(self, text="Color", font=("TkDefaultFont", 20)).grid(row=2, column=0)
+
+        om_color = tk.OptionMenu(self, self.color, *COLORS.values())
+        om_color.config(font=("TkDefaultFont", 20))
+        om_color['menu'].config(font=("TkDefaultFont", 20))
+        om_color.grid(row=2, column=1, sticky="ew")
 
         # Duración
-        ttk.Label(self, text="Duración (ms)").grid(row=3, column=0)
-        ttk.Entry(self, textvariable=self.duration).grid(row=3, column=1)
+        tk.Label(self, text="Duración (ms)", font=("TkDefaultFont", 20)).grid(row=3, column=0)
+        ttk.Entry(self, textvariable=self.duration, font=("TkDefaultFont", 20)).grid(row=3, column=1)
 
         # Repeticiones
-        ttk.Label(self, text="Repeticiones").grid(row=4, column=0)
-        ttk.Entry(self, textvariable=self.repetitions).grid(row=4, column=1)
+        tk.Label(self, text="Repeticiones", font=("TkDefaultFont", 20)).grid(row=4, column=0)
+        ttk.Entry(self, textvariable=self.repetitions, font=("TkDefaultFont", 20)).grid(row=4, column=1)
 
-        ttk.Label(self, text="Fondo").grid(row=5, column=0)
+        tk.Label(self, text="Fondo", font=("TkDefaultFont", 20)).grid(row=5, column=0)
 
-        # Modo de fondo
-        ttk.Combobox(
-            self,
-            textvariable=self.bg_mode,
-            values=list(BACKGROUND_MODES.values()),
-            state="readonly"
-        ).grid(row=5, column=1)
+        om_bg = tk.OptionMenu(self, self.bg_mode, *BACKGROUND_MODES.values())
+        om_bg.config(font=("TkDefaultFont", 20))
+        om_bg['menu'].config(font=("TkDefaultFont", 20))
+        om_bg.grid(row=5, column=1, sticky="ew")
 
-        ttk.Label(self, text="Dificultad").grid(row=6, column=0)
+        tk.Label(self, text="Dificultad", font=("TkDefaultFont", 20)).grid(row=6, column=0)
 
-        # Dificultad
-        ttk.Combobox(
-            self,
-            textvariable=self.difficulty,
-            values=list(DIFFICULTY.values()),
-            state="readonly"
-        ).grid(row=6, column=1)
+        om_diff = tk.OptionMenu(self, self.difficulty, *DIFFICULTY.values())
+        om_diff.config(font=("TkDefaultFont", 20))
+        om_diff['menu'].config(font=("TkDefaultFont", 20))
+        om_diff.grid(row=6, column=1, sticky="ew")
 
         # Botón
         ttk.Button(self, text="Iniciar", command=self._start).grid(row=7, column=0, columnspan=2, pady=20)
