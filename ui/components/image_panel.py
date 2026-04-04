@@ -1,27 +1,48 @@
 from tkinter import ttk
+import tkinter as tk
 from PIL import Image, ImageTk
+import random
 
 class ImagePanel(ttk.Frame):
-    def __init__(self, parent, image_path):
+    def __init__(self, parent):
         super().__init__(parent)
 
-        self.original = Image.open(image_path)
+        self.canvas = tk.Canvas(self, highlightthickness=0)
+        self.canvas.pack(fill="both", expand=True)
 
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1)
+        self.image = None
+        self.circle = None
+        self.original = None
+        self.shape = None
 
-        self.label = ttk.Label(self, anchor="center")
-        self.label.grid(row=0, column=0)
+        self.bind("<Configure>", lambda e: self._render())
 
-        self.after(50, self._resize)  # 🔑 primera renderización correcta
-        self.bind("<Configure>", lambda e: self._resize())
+    def set_state(self, column_state):
+        self.image = column_state.image_path
+        self.shape = column_state.shape
 
-    def _resize(self):
+        if self.image:
+            from PIL import Image
+            self.original = Image.open(self.image)
+        else:
+            self.original = None
+
+        self._render()
+
+
+    def _render(self):
         w = self.winfo_width()
         h = self.winfo_height()
 
         if w <= 1 or h <= 1:
             return
+
+        self.canvas.delete("all")
+
+        if not self.original:
+            return
+
+        from PIL import ImageTk, Image
 
         img_ratio = self.original.width / self.original.height
         frame_ratio = w / h
@@ -36,7 +57,39 @@ class ImagePanel(ttk.Frame):
         resized = self.original.resize((new_w, new_h), Image.LANCZOS)
         self.tk_image = ImageTk.PhotoImage(resized)
 
-        self.label.config(image=self.tk_image)
+        cx, cy = w // 2, h // 2
 
-        # 🔑 CENTRADO REAL
-        self.label.place(relx=0.5, rely=0.5, anchor="center")
+        self.canvas.create_image(cx, cy, image=self.tk_image)
+
+        # 🔥 DIBUJAR SHAPE
+        if self.shape:
+            self._draw_shape(cx, cy, new_w)
+
+    def _draw_shape(self, cx, cy, image_width):
+        size = int(image_width * 0.1)
+        half = size // 2
+
+        shape_type = self.shape.type
+        color = self.shape.color
+
+        if shape_type == "circle":
+            self.canvas.create_oval(
+                cx - half, cy - half,
+                cx + half, cy + half,
+                fill=color, outline=""
+            )
+
+        elif shape_type == "square":
+            self.canvas.create_rectangle(
+                cx - half, cy - half,
+                cx + half, cy + half,
+                fill=color, outline=""
+            )
+
+        elif shape_type == "triangle":
+            self.canvas.create_polygon(
+                cx, cy - half,          # arriba
+                cx - half, cy + half,   # abajo izquierda
+                cx + half, cy + half,   # abajo derecha
+                fill=color, outline=""
+            )
