@@ -14,10 +14,17 @@ class ConfigScreen(ttk.Frame):
         self.color = tk.StringVar(value=list(COLORS.values())[0])
         self.duration = tk.IntVar(value=1000)
         self.repetitions = tk.IntVar(value=5)
-        self.bg_mode = tk.StringVar(value=BACKGROUND_MODES["random"])
+        self.bg_mode = tk.StringVar(value=BACKGROUND_MODES["always"])
         self.difficulty = tk.StringVar(value=DIFFICULTY["medium"])
+        self.blank_duration = tk.IntVar(value=1000)
 
         self._build()
+        self.after(10, self._force_focus)
+
+    def _force_focus(self):
+        self.focus_set()
+        self.update_idletasks()
+        self.update()
 
     def _build(self):
 
@@ -40,30 +47,45 @@ class ConfigScreen(ttk.Frame):
         om_color['menu'].config(font=("TkDefaultFont", 20))
         om_color.grid(row=2, column=1, sticky="ew")
 
-        # Duración
-        tk.Label(self, text="Duración (ms)", font=("TkDefaultFont", 20)).grid(row=3, column=0)
+        # Duración presentacion del objetivo
+        tk.Label(self, text="Duración objetivo(ms)", font=("TkDefaultFont", 20)).grid(row=3, column=0)
         ttk.Entry(self, textvariable=self.duration, font=("TkDefaultFont", 20)).grid(row=3, column=1)
 
+        # Duración pantalla transición
+        tk.Label(self, text="Duración transición (ms)", font=("TkDefaultFont", 20)).grid(row=4, column=0)
+        ttk.Entry(self, textvariable=self.blank_duration, font=("TkDefaultFont", 20)).grid(row=4, column=1)
+
         # Repeticiones
-        tk.Label(self, text="Repeticiones", font=("TkDefaultFont", 20)).grid(row=4, column=0)
-        ttk.Entry(self, textvariable=self.repetitions, font=("TkDefaultFont", 20)).grid(row=4, column=1)
+        tk.Label(self, text="Repeticiones", font=("TkDefaultFont", 20)).grid(row=5, column=0)
+        ttk.Entry(self, textvariable=self.repetitions, font=("TkDefaultFont", 20)).grid(row=5, column=1)
 
-        tk.Label(self, text="Fondo", font=("TkDefaultFont", 20)).grid(row=5, column=0)
-
+        # Fondo
+        tk.Label(self, text="Fondo", font=("TkDefaultFont", 20)).grid(row=6, column=0)
         om_bg = tk.OptionMenu(self, self.bg_mode, *BACKGROUND_MODES.values())
         om_bg.config(font=("TkDefaultFont", 20))
         om_bg['menu'].config(font=("TkDefaultFont", 20))
-        om_bg.grid(row=5, column=1, sticky="ew")
+        om_bg.grid(row=6, column=1, sticky="ew")
 
-        tk.Label(self, text="Dificultad", font=("TkDefaultFont", 20)).grid(row=6, column=0)
-
+        # Dificultad
+        tk.Label(self, text="Dificultad", font=("TkDefaultFont", 20)).grid(row=7, column=0)
         om_diff = tk.OptionMenu(self, self.difficulty, *DIFFICULTY.values())
         om_diff.config(font=("TkDefaultFont", 20))
         om_diff['menu'].config(font=("TkDefaultFont", 20))
-        om_diff.grid(row=6, column=1, sticky="ew")
+        om_diff.grid(row=7, column=1, sticky="ew")
 
         # Botón
-        ttk.Button(self, text="Iniciar", command=self._start).grid(row=7, column=0, columnspan=2, pady=20)
+        #ttk.Button(self, text="Iniciar", command=self._start).grid(row=8, column=0, columnspan=2, pady=20)
+        base_font = ("TkDefaultFont", int(20 * 1.1))
+        btn_style = ttk.Style()
+        btn_style.configure("Big.TButton", font=base_font, padding=(20, 15))
+
+        btn_empezar = ttk.Button(
+            self,
+            text="Iniciar ejercicio",
+            command=self._start,
+            style="Big.TButton"
+        )
+        btn_empezar.grid(row=8, column=0, columnspan=2, pady=20)
 
     def _start(self):
         difficulty_key = INV_DIFFICULTY[self.difficulty.get()]
@@ -74,6 +96,7 @@ class ConfigScreen(ttk.Frame):
             duration=self.duration.get(),
             repetitions=self.repetitions.get(),
             background_mode=INV_BACKGROUND_MODES[self.bg_mode.get()],
-            target_probability=DIFFICULTY_VALUES[difficulty_key]
+            target_probability=DIFFICULTY_VALUES[difficulty_key],
+            blank_duration=self.blank_duration.get()
         )
         self.on_start(config)

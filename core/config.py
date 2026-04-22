@@ -8,3 +8,4 @@ class ExerciseConfig:
     repetitions: int  # nº veces objetivo
     background_mode: str   # "random" | "always"
     target_probability: float  # 0.0 - 1.0
+    blank_duration: int = 1000  # ms de pantalla de transición (por defecto 1s)

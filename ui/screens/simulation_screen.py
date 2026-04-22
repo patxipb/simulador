@@ -17,6 +17,7 @@ class SimulationScreen(ttk.Frame):
             config
         )
 
+        self._show_blank = True
         self._loop()
 
     def _loop(self):
@@ -24,7 +25,15 @@ class SimulationScreen(ttk.Frame):
             self.after(5000, self.on_finish)  # pausa 5s
             return
 
-        state = self.engine.next_scene()
-        self.layout.render(state)
-
-        self.after(self.config.duration, self._loop)
+        if self._show_blank:
+            # Pantalla de transición: solo fondo, sin figuras objetivo
+            from core.state import SceneState, ColumnState
+            blank_state = SceneState([ColumnState(image_path="assets/images/figura_sola.png", shape=None) for _ in range(3)])
+            self.layout.render(blank_state)
+            self._show_blank = False
+            self.after(self.config.blank_duration, self._loop)
+        else:
+            state = self.engine.next_scene()
+            self.layout.render(state)
+            self._show_blank = True
+            self.after(self.config.duration, self._loop)

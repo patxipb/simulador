@@ -15,6 +15,9 @@ class App:
             self.current.destroy()
         self.current = screen
         self.current.pack(fill="both", expand=True)
+        self.current.focus_set()
+        self.root.update_idletasks()
+        self.root.update()
 
     def show_config(self):
         self._set_screen(ConfigScreen(self.root, self.start_simulation))
@@ -23,7 +26,7 @@ class App:
         self._set_screen(SimulationScreen(self.root, config, self.show_end))
 
     def show_end(self):
-        self._set_screen(EndScreen(self.root))
+        self._set_screen(EndScreen(self.root, on_restart=self.show_config))
 
 def main():
     root = tk.Tk()
