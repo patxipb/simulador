@@ -28,7 +28,7 @@ class ConfigScreen(ttk.Frame):
 
     def _build(self):
 
-        tk.Label(self, text="Configuración", font=("TkDefaultFont", 32)).grid(row=0, column=0, columnspan=2, pady=20)
+        tk.Label(self, text="Ejercicio de selección de figuras objetivo", font=("TkDefaultFont", 32)).grid(row=0, column=0, columnspan=2, pady=20)
 
 
         # Forma

@@ -30,6 +30,7 @@ class App:
 
 def main():
     root = tk.Tk()
+    root.title("Simulador de Atención Visual")
     root.state("zoomed")
 
     #####################
